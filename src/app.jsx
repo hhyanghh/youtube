@@ -9,8 +9,6 @@ function App({youtube}) {
     youtube
       .search(query)
       .then(videos => setVideos(videos))
-
-  
   }
 
   useEffect(() => {
