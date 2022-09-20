@@ -3,23 +3,24 @@ import styles from './app.module.css'
 import SearchHeader from './components/search_header/SearchHeader';
 import VideoList from './components/video_list/VideoList';
 
-function App() {
+function App({youtube}) {
   const [videos, setVideos] = useState([]);
+  const search = query => {
+    youtube
+      .search(query)
+      .then(videos => setVideos(videos))
+
+  
+  }
 
   useEffect(() => {
-    const requestOptions = {
-      method: 'GET',
-      redirect: 'follow'
-    };
-
-    fetch("https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=25&key=AIzaSyA0u3LlFYH5HIkZCiqS5zSCzisQsCj4j6Q", requestOptions)
-      .then(response => response.json())
-      .then(result => setVideos(result.items))
-      .catch(error => console.log('error', error));
+    youtube
+      .mostPopular()
+      .then(videos => setVideos(videos))
   }, []);
   return (
     <div className={styles.app}>
-      <SearchHeader />
+      <SearchHeader onSearch={search}/>
      <VideoList videos={videos} />
     </div>
   )
